@@ -923,7 +923,8 @@ def _do_run_file(cli, conf_file):
             raise cli.HandledError()
     finally:
         if cli.bess.is_connected():
-            cli.bess.resume_all()
+            pass
+            # cli.bess.resume_all()
 
 
 def _run_file(cli, conf_file, env_map):

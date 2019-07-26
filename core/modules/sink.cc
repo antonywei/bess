@@ -31,6 +31,31 @@
 #include "sink.h"
 
 void Sink::ProcessBatch(Context *, bess::PacketBatch *batch) {
+    const int cnt = batch->cnt();
+    for (int i = 0; i < cnt; i++) {
+        bess::Packet *pkt = batch->pkts()[i];
+
+        char *head = pkt->head_data<char *>();
+        int ip_offset = 14;
+        std::cout << "****** debug in rewrite *******" <<std::endl;
+        uint8_t srcIp1 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 12));
+        uint8_t srcIp2 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 13));
+        uint8_t srcIp3 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 14));
+        uint8_t srcIp4 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 15));
+
+        uint8_t dstIp1 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 16));
+        uint8_t dstIp2 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 17));
+        uint8_t dstIp3 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 18));
+        uint8_t dstIp4 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 19));
+
+        uint16_t srcPort = *(reinterpret_cast<uint16_t *>(head + ip_offset + 20));
+        uint16_t dstPort = *(reinterpret_cast<uint16_t *>(head + ip_offset + 22));
+
+        printf("The srcIp is: %d.%d.%d.%d \n", +srcIp1, +srcIp2, +srcIp3, +srcIp4);
+        printf("The dstIp is: %d.%d.%d.%d \n", +dstIp1, +dstIp2, +dstIp3, +dstIp4);
+        printf("The srcPort is: %d \n", +srcPort);
+        printf("The dstPort is: %d \n", +dstPort);
+    }
   bess::Packet::Free(batch);
 }
 

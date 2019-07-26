@@ -57,7 +57,7 @@ class Measure final : public Module {
   void ProcessBatch(Context *ctx, bess::PacketBatch *batch) override;
 
   CommandResponse CommandGetSummary(
-      const bess::pb::MeasureCommandGetSummaryArg &arg);
+          const bess::pb::MeasureCommandGetSummaryArg &arg);
   CommandResponse CommandClear(const bess::pb::EmptyArg &arg);
 
   static const Commands cmds;

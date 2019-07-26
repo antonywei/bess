@@ -348,6 +348,8 @@ def build_dpdk():
 
 
 def generate_protobuf_files():
+    check_essential()
+
     grpc = cmd('which grpc_python_plugin', quiet=True).strip()
 
     def gen_one_set_of_files(srcdir, outdir):

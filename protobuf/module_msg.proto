@@ -86,6 +86,7 @@ message ExactMatchCommandDeleteArg {
 message ExactMatchCommandClearArg {
 }
 
+
 /**
  * The ExactMatch module has a command `set_default_gate(...)` which takes one parameter.
  * This command routes all traffic which does _not_ match a rule to a specified gate.
@@ -261,6 +262,27 @@ message MeasureCommandGetSummaryResponse {
   Histogram jitter = 5;
 }
 
+/**
+ * the MVsketch get summary module
+ *_INPUT GATE_: 1
+ *_OUTPUT GATE_: 1
+**/
+
+message MVsketchCommandGetValArg{
+    double threshold = 1;
+}
+
+message MVsketchCommandGetValResponse {
+    message TrafficInfo {
+        uint32 src_ip = 1;    ///  IP block in CIDR. "".
+        uint32 dst_ip = 2;
+        uint32 src_port = 3;    /// port block in CIDR.".
+        uint32 dst_port = 4;
+        uint32 proto = 5;
+        uint64 count = 6;
+    }
+    repeated TrafficInfo flow_list = 1;
+}
 
 /**
  * The Module DRR provides fair scheduling of flows based on a quantum which is
@@ -422,6 +444,19 @@ message ACLArg {
     bool drop = 6;        /// Drop matched packets if true, forward if false. By default ACL drops all traffic.
   }
   repeated Rule rules = 1; ///A list of ACL rules.
+}
+
+/** add my_acl module**/
+message MYACLArg{
+    message Rule{
+        string src_ip = 1;    /// Source IP block in CIDR. Wildcard if "".
+        string dst_ip = 2;    /// Destination IP block in CIDR. Wildcard if "".
+        uint32 src_port = 3;  /// TCP/UDP source port. Wildcard if 0.
+        uint32 dst_port = 4;  /// TCP/UDP Destination port. Wildcard if 0.
+        bool established = 5; /// Not implemented
+        bool transfer = 6;
+    }
+    repeated Rule rules = 1;
 }
 
 /**
@@ -657,6 +692,20 @@ message MeasureArg {
   uint64 latency_ns_max = 4; /// maximum latency expected, in ns (default 0.1 s)
   uint32 latency_ns_resolution = 5; /// resolution, in ns (default 100)
 }
+/*
+* modify measure module to design mv-sketch module
+*_INPUT GATE_: 1
+*_OUTPUT GATE_: 1
+*/
+message MVsketchArg {
+   uint64 width = 1;   //row of mv-sketch
+   uint64 depth = 2 ;  //depth of mv-sketch
+
+}
+
+
+
+
 
 /**
  * The merge module takes no parameters. It has multiple input gates,

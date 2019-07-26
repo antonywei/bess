@@ -1,3 +1,4 @@
+# Copyright (c) 2014-2016, The Regents of the University of California.
 # Copyright (c) 2016-2017, Nefeli Networks, Inc.
 # All rights reserved.
 #
@@ -28,29 +29,51 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import scapy.all as scapy
+import time
+import socket,struct
+from test_utils import *
+# 'show module' command shows detailed stats/parameters
 
-# Craft a packet with the specified IP addresses
+pkt_size = int($BESS_PKT_SIZE!'60')
+assert(60 <= pkt_size <= 1522)
+
+eth = scapy.Ether(src='02:1e:67:9f:4d:ae', dst='06:16:3e:1b:72:32')
+ip = scapy.IP(src='10.5.0.1', dst='10.0.0.2')   # dst IP is overwritten
+tcp = scapy.TCP(sport=10001, dport=10002)
+payload = ('hello' + '0123456789' * 200)[:pkt_size-len(eth/ip/tcp)]
+pkt = eth/ip/tcp/payload
+pkt_data = bytes(pkt)
+
+# NOTE: without quick_rampup=1, it takes a while to converge to
+# the desied load level, especially when flow duration is pareto distribution
+
 def gen_packet(proto, src_ip, dst_ip):
     eth = scapy.Ether(src='02:1e:67:9f:4d:ae', dst='06:16:3e:1b:72:32')
     ip = scapy.IP(src=src_ip, dst=dst_ip)
-    udp = proto(sport=10001, dport=10002)
+    tcp = proto(sport=10001, dport=10002)
     payload = 'helloworld'
     pkt = eth/ip/udp/payload
     return bytes(pkt)
 
 packets = [gen_packet(scapy.UDP, '172.16.100.1', '10.0.0.1'),
-           gen_packet(scapy.UDP, '172.12.55.99', '12.34.56.78'),
-           gen_packet(scapy.UDP, '172.12.55.99', '10.0.0.1'),
-           gen_packet(scapy.UDP, '172.16.100.1', '12.34.56.78'),
            gen_packet(scapy.TCP, '172.12.55.99', '12.34.56.78'),
-           gen_packet(scapy.UDP, '192.168.1.123', '12.34.56.78'),
+#           gen_packet(scapy.UDP, '172.16.100.1', '10.0.0.1'),
+#           gen_packet(scapy.UDP, '172.12.55.99', '10.0.0.1'),
+#           gen_packet(scapy.UDP, '172.16.100.1', '12.34.56.78'),
+#           gen_packet(scapy.UDP, '192.168.1.123', '12.34.56.78')
           ]
 
-fw::ACL(rules=[{'src_ip': '172.12.0.0/16', 'drop': False}])
+mv = MVsketch(width=3,depth=4)
 
-Source() -> Rewrite(templates=packets) -> Measure()-> fw -> Sink()
+FlowGen(template=pkt_data,pps=1e1)->Rewrite(templates=packets) ->mv-> Sink()
 
-a = 100
-while(a):
-  a = a+1
-  print(Measure.GetSummary())
+bess.resume_all()
+time.sleep(0.1)
+bess.pause_all()
+stats = mv.get_val(threshold=0.1)
+#pdb.set_trace()
+print(stats)
+print("src ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[0].src_ip)))
+print("dst ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[0].dst_ip)))
+print("src port %#x"%stats.flow_list[0].src_port)
+print("dst port %#x"%stats.flow_list[0].dst_port)
