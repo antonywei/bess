@@ -50,7 +50,7 @@ static void SetTrafficInfo(key_tp flow_key,val_tp var,bess::pb::MVsketchCommandG
     uint32_t src_port = *(reinterpret_cast<uint16_t *>(flow_key.key + 8));
     uint32_t dst_port = *(reinterpret_cast<uint16_t *>(flow_key.key + 10));
     uint32_t proto = *(reinterpret_cast<uint8_t *>(flow_key.key + 12));
-    Debug_Module_packet(flow_key.key,"*****debug Set Traffic Info******");
+    //Debug_Module_packet(flow_key.key,"*****debug Set Traffic Info******");
     r->set_src_ip(src_ip);
     r->set_dst_ip(dst_ip);
     r->set_src_port(src_port);
@@ -122,10 +122,10 @@ void MVsketch::Reset(){
 void MVsketch::Update(unsigned char* key, val_tp val){
     Sum_total += val;
     mv_.sum += val;
-    // mv_= {sum = 4544, counts = 0x730bb0, depth = 4, width = 1366,
+    //mv_= {sum = 4544, counts = 0x730bb0, depth = 4, width = 1366,
     //       lgn = 64, hash = 0x766180, scale = 0x7661b0, hardner = 0x7661e0}
-    // mv is the main mvsketch table
-    Debug_Module_packet(key,"*****update begin********");
+    //mv is the main mvsketch table
+    //Debug_Module_packet(key,"*****update begin********");
     unsigned long bucket = 0;
     int keylen = mv_.lgn/8;
     for (int i = 0; i < mv_.depth; i++) {
@@ -172,42 +172,6 @@ void MVsketch::ProcessBatch(Context *ctx, bess::PacketBatch *batch) {
         t.key.dst_port = *(reinterpret_cast<uint16_t *>(head + ip_offset + 22));
         t.key.protocol = *(reinterpret_cast<uint8_t *>(head + ip_offset + 9)); /* ip_proto */
         t.size = 1;
-        /*debug code
-
-        std::cout << "****** debug in process batch 1 *******" <<std::endl;
-        uint8_t srcIp1 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 12));
-        uint8_t srcIp2 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 13));
-        uint8_t srcIp3 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 14));
-        uint8_t srcIp4 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 15));
-
-        uint8_t dstIp1 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 16));
-        uint8_t dstIp2 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 17));
-        uint8_t dstIp3 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 18));
-        uint8_t dstIp4 = *(reinterpret_cast<uint8_t *>(head + ip_offset + 19));
-
-        uint16_t srcPort = *(reinterpret_cast<uint16_t *>(head + ip_offset + 20));
-        uint16_t dstPort = *(reinterpret_cast<uint16_t *>(head + ip_offset + 22));
-
-        printf("The srcIp is: %d.%d.%d.%d \n", +srcIp1, +srcIp2, +srcIp3, +srcIp4);
-        printf("The dstIp is: %d.%d.%d.%d \n", +dstIp1, +dstIp2, +dstIp3, +dstIp4);
-        printf("The srcPort is: %d \n", +srcPort);
-        printf("The dstPort is: %d \n", +dstPort);
-
-        std::cout<<"****** debug in PROCESS BATCH *******";
-        in_addr saddr;
-        saddr.s_addr = t.key.src_ip;
-        char *src_ip_a = inet_ntoa(saddr);
-        std::cout<<"src ip "<<src_ip_a<<std::endl;
-        in_addr daddr ;
-        daddr.s_addr = t.key.dst_ip;
-        char *dst_ip_a = inet_ntoa(daddr);
-        std::cout<<"dst ip "<<dst_ip_a<<std::endl;
-        std::cout<<"src port  "<<std::hex<<t.key.src_port<<std::endl;
-        std::cout<<"dst port  "<<std::hex<<t.key.dst_port<<std::endl;
-        //std::cout<<"proto  "<<t.key.protocol<<std::endl;
-         //t.size = *(reinterpret_cast<uint16_t *>(head + ip_offset + 2));
-        debug complete
-        */
         Update((unsigned char*)&(t.key), (val_tp)t.size);
         EmitPacket(ctx, snb, incoming_gate);
     }

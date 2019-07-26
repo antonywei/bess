@@ -1105,9 +1105,6 @@
 		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/traffic_class_test.cc">
 			<Option target="bess"/>
 		</Unit>
-		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/utils/MVsketchTypeDefine.h">
-			<Option target="bess"/>
-		</Unit>
 		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/utils/arp.h">
 			<Option target="bess"/>
 		</Unit>
@@ -1204,7 +1201,7 @@
 		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/utils/format.h">
 			<Option target="bess"/>
 		</Unit>
-		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/utils/hash.c">
+		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/utils/hash.cc">
 			<Option target="bess"/>
 		</Unit>
 		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/utils/hash.h">

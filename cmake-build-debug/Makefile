@@ -3606,32 +3606,32 @@ core/utils/format.cc.s:
 	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/format.cc.s
 .PHONY : core/utils/format.cc.s
 
-core/utils/hash.o: core/utils/hash.c.o
+core/utils/hash.o: core/utils/hash.cc.o
 
 .PHONY : core/utils/hash.o
 
 # target to build an object file
-core/utils/hash.c.o:
-	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.c.o
-.PHONY : core/utils/hash.c.o
+core/utils/hash.cc.o:
+	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.cc.o
+.PHONY : core/utils/hash.cc.o
 
-core/utils/hash.i: core/utils/hash.c.i
+core/utils/hash.i: core/utils/hash.cc.i
 
 .PHONY : core/utils/hash.i
 
 # target to preprocess a source file
-core/utils/hash.c.i:
-	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.c.i
-.PHONY : core/utils/hash.c.i
+core/utils/hash.cc.i:
+	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.cc.i
+.PHONY : core/utils/hash.cc.i
 
-core/utils/hash.s: core/utils/hash.c.s
+core/utils/hash.s: core/utils/hash.cc.s
 
 .PHONY : core/utils/hash.s
 
 # target to generate assembly for a file
-core/utils/hash.c.s:
-	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.c.s
-.PHONY : core/utils/hash.c.s
+core/utils/hash.cc.s:
+	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.cc.s
+.PHONY : core/utils/hash.cc.s
 
 core/utils/histogram_test.o: core/utils/histogram_test.cc.o
 

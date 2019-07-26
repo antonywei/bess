@@ -1022,7 +1022,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/bess.dir/sample_plugin/modules/sequential_update.cc.o"
   "CMakeFiles/bess.dir/core/modules/myacl.cc.o"
   "CMakeFiles/bess.dir/core/modules/MVsketch.cc.o"
-  "CMakeFiles/bess.dir/core/utils/hash.c.o"
+  "CMakeFiles/bess.dir/core/utils/hash.cc.o"
   "bess.pdb"
   "bess"
 )

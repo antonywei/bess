@@ -24609,28 +24609,28 @@ CMakeFiles/bess.dir/core/modules/MVsketch.cc.o.provides: CMakeFiles/bess.dir/cor
 CMakeFiles/bess.dir/core/modules/MVsketch.cc.o.provides.build: CMakeFiles/bess.dir/core/modules/MVsketch.cc.o
 
 
-CMakeFiles/bess.dir/core/utils/hash.c.o: CMakeFiles/bess.dir/flags.make
-CMakeFiles/bess.dir/core/utils/hash.c.o: ../core/utils/hash.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/tmp/tmp.xcbvpeBMlO/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1024) "Building C object CMakeFiles/bess.dir/core/utils/hash.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/bess.dir/core/utils/hash.c.o   -c /tmp/tmp.xcbvpeBMlO/core/utils/hash.c
+CMakeFiles/bess.dir/core/utils/hash.cc.o: CMakeFiles/bess.dir/flags.make
+CMakeFiles/bess.dir/core/utils/hash.cc.o: ../core/utils/hash.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/tmp/tmp.xcbvpeBMlO/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1024) "Building CXX object CMakeFiles/bess.dir/core/utils/hash.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bess.dir/core/utils/hash.cc.o -c /tmp/tmp.xcbvpeBMlO/core/utils/hash.cc
 
-CMakeFiles/bess.dir/core/utils/hash.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/bess.dir/core/utils/hash.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /tmp/tmp.xcbvpeBMlO/core/utils/hash.c > CMakeFiles/bess.dir/core/utils/hash.c.i
+CMakeFiles/bess.dir/core/utils/hash.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bess.dir/core/utils/hash.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /tmp/tmp.xcbvpeBMlO/core/utils/hash.cc > CMakeFiles/bess.dir/core/utils/hash.cc.i
 
-CMakeFiles/bess.dir/core/utils/hash.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/bess.dir/core/utils/hash.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /tmp/tmp.xcbvpeBMlO/core/utils/hash.c -o CMakeFiles/bess.dir/core/utils/hash.c.s
+CMakeFiles/bess.dir/core/utils/hash.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bess.dir/core/utils/hash.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /tmp/tmp.xcbvpeBMlO/core/utils/hash.cc -o CMakeFiles/bess.dir/core/utils/hash.cc.s
 
-CMakeFiles/bess.dir/core/utils/hash.c.o.requires:
+CMakeFiles/bess.dir/core/utils/hash.cc.o.requires:
 
-.PHONY : CMakeFiles/bess.dir/core/utils/hash.c.o.requires
+.PHONY : CMakeFiles/bess.dir/core/utils/hash.cc.o.requires
 
-CMakeFiles/bess.dir/core/utils/hash.c.o.provides: CMakeFiles/bess.dir/core/utils/hash.c.o.requires
-	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.c.o.provides.build
-.PHONY : CMakeFiles/bess.dir/core/utils/hash.c.o.provides
+CMakeFiles/bess.dir/core/utils/hash.cc.o.provides: CMakeFiles/bess.dir/core/utils/hash.cc.o.requires
+	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/utils/hash.cc.o.provides.build
+.PHONY : CMakeFiles/bess.dir/core/utils/hash.cc.o.provides
 
-CMakeFiles/bess.dir/core/utils/hash.c.o.provides.build: CMakeFiles/bess.dir/core/utils/hash.c.o
+CMakeFiles/bess.dir/core/utils/hash.cc.o.provides.build: CMakeFiles/bess.dir/core/utils/hash.cc.o
 
 
 # Object files for target bess
@@ -25658,7 +25658,7 @@ bess_OBJECTS = \
 "CMakeFiles/bess.dir/sample_plugin/modules/sequential_update.cc.o" \
 "CMakeFiles/bess.dir/core/modules/myacl.cc.o" \
 "CMakeFiles/bess.dir/core/modules/MVsketch.cc.o" \
-"CMakeFiles/bess.dir/core/utils/hash.c.o"
+"CMakeFiles/bess.dir/core/utils/hash.cc.o"
 
 # External object files for target bess
 bess_EXTERNAL_OBJECTS =
@@ -26686,7 +26686,7 @@ bess: CMakeFiles/bess.dir/deps/dpdk-17.11/test/test-pipeline/runtime.c.o
 bess: CMakeFiles/bess.dir/sample_plugin/modules/sequential_update.cc.o
 bess: CMakeFiles/bess.dir/core/modules/myacl.cc.o
 bess: CMakeFiles/bess.dir/core/modules/MVsketch.cc.o
-bess: CMakeFiles/bess.dir/core/utils/hash.c.o
+bess: CMakeFiles/bess.dir/core/utils/hash.cc.o
 bess: CMakeFiles/bess.dir/build.make
 bess: CMakeFiles/bess.dir/objects1.rsp
 bess: CMakeFiles/bess.dir/link.txt
@@ -27721,7 +27721,7 @@ CMakeFiles/bess.dir/requires: CMakeFiles/bess.dir/deps/dpdk-17.11/test/test-pipe
 CMakeFiles/bess.dir/requires: CMakeFiles/bess.dir/sample_plugin/modules/sequential_update.cc.o.requires
 CMakeFiles/bess.dir/requires: CMakeFiles/bess.dir/core/modules/myacl.cc.o.requires
 CMakeFiles/bess.dir/requires: CMakeFiles/bess.dir/core/modules/MVsketch.cc.o.requires
-CMakeFiles/bess.dir/requires: CMakeFiles/bess.dir/core/utils/hash.c.o.requires
+CMakeFiles/bess.dir/requires: CMakeFiles/bess.dir/core/utils/hash.cc.o.requires
 
 .PHONY : CMakeFiles/bess.dir/requires
 
