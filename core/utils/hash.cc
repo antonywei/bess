@@ -139,17 +139,20 @@ uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )
     {
         case 7: h ^= uint64_t(data2[6]) << 48;
             break;
-        case 6: h ^= uint64_t(data2[5]) << 40;break;
-        case 5: h ^= uint64_t(data2[4]) << 32;break;
-        case 4: h ^= uint64_t(data2[3]) << 24;break;
-        case 3: h ^= uint64_t(data2[2]) << 16;break;
-        case 2: h ^= uint64_t(data2[1]) << 8;break;
+        case 6: h ^= uint64_t(data2[5]) << 40;
+        case 5: h ^= uint64_t(data2[4]) << 32;
+        case 4: h ^= uint64_t(data2[3]) << 24;
+        case 3: h ^= uint64_t(data2[2]) << 16;
+        case 2: h ^= uint64_t(data2[1]) << 8;
         case 1: h ^= uint64_t(data2[0]);
-            h *= m;break;
+            h *= m;
     };
     */
-    for(int i = len & 7;i >= 0; i--){
+    for(int i = len & 7;i > 0; i--){
         h ^=uint64_t(data2[i-1]) << (i-1)*8;
+    }
+    if(len & 7){
+        h *= m;
     }
     h ^= h >> r;
     h *= m;
