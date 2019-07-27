@@ -134,7 +134,7 @@ uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )
     }
 
     const unsigned char * data2 = (const unsigned char*)data;
-
+    /*
     switch(len & 7)
     {
         case 7: h ^= uint64_t(data2[6]) << 48;
@@ -147,7 +147,10 @@ uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )
         case 1: h ^= uint64_t(data2[0]);
             h *= m;break;
     };
-
+    */
+    for(int i = len & 7;i >= 0; i--){
+        h ^=uint64_t(data2[i-1]) << (i-1)*8;
+    }
     h ^= h >> r;
     h *= m;
     h ^= h >> r;

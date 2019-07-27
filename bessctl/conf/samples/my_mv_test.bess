@@ -50,12 +50,12 @@ pkt_data = bytes(pkt)
 def gen_packet(proto, src_ip, dst_ip):
     eth = scapy.Ether(src='02:1e:67:9f:4d:ae', dst='06:16:3e:1b:72:32')
     ip = scapy.IP(src=src_ip, dst=dst_ip)
-    tcp = proto(sport=10001, dport=10002)
+    tcp = proto(sport=1201, dport=1202)
     payload = 'helloworld'
-    pkt = eth/ip/udp/payload
+    pkt = eth/ip/tcp/payload
     return bytes(pkt)
 
-packets = [gen_packet(scapy.tcp, '172.16.100.1', '10.0.0.1'),
+packets = [gen_packet(scapy.TCP, '172.16.100.1', '10.0.0.1'),
            gen_packet(scapy.TCP, '172.12.55.99', '12.34.56.78'),
 #           gen_packet(scapy.UDP, '172.16.100.1', '10.0.0.1'),
 #           gen_packet(scapy.UDP, '172.12.55.99', '10.0.0.1'),
@@ -73,7 +73,11 @@ bess.pause_all()
 stats = mv.get_val(threshold=0.1)
 #pdb.set_trace()
 print(stats)
-print("src ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[0].src_ip)))
-print("dst ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[0].dst_ip)))
-print("src port %#x"%stats.flow_list[0].src_port)
-print("dst port %#x"%stats.flow_list[0].dst_port)
+for i in range(len(stats.flow_list)):
+    print("src ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[i].src_ip)))
+    print("dst ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[i].dst_ip)))
+    print(hex(stats.flow_list[i].src_port))
+    print(hex(stats.flow_list[i].dst_port))
+    print("resval",stats.flow_list[i].count)
+#print("src port ",struct.pack('<L', hex(stats.flow_list[0].src_port)))
+#print("dst port ",struct.pack('<L', hex(stats.flow_list[0].dst_port)))

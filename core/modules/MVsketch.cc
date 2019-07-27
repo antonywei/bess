@@ -172,6 +172,7 @@ void MVsketch::ProcessBatch(Context *ctx, bess::PacketBatch *batch) {
         t.key.dst_port = *(reinterpret_cast<uint16_t *>(head + ip_offset + 22));
         t.key.protocol = *(reinterpret_cast<uint8_t *>(head + ip_offset + 9)); /* ip_proto */
         t.size = 1;
+        //Debug_Module_packet((unsigned char*)&(t.key),"****debug in update*****");
         Update((unsigned char*)&(t.key), (val_tp)t.size);
         EmitPacket(ctx, snb, incoming_gate);
     }
@@ -186,13 +187,13 @@ void MVsketch::Query(val_tp thresh, std::vector<std::pair<key_tp, val_tp> >&resu
             res.insert(reskey);
         }
     }
-/*
+    /*
     for (int i = 0; i < mv_.width; i++) {
         if (mv_.counts[i]->sum > thresh) {
             Debug_Module_packet(mv_.counts[i]->key,"****debug in query****");
         }
     }
-*/
+    */
     for (auto it = res.begin(); it != res.end(); it++) {
         val_tp resval = 0;
         for (int j = 0; j < mv_.depth; j++) {
