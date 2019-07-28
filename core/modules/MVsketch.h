@@ -14,6 +14,7 @@
 #include <vector>
 #define LGN 13 // if LGN = 13 HASH 5-TUPLE,LGN = 8 HASH ip only
 #include "../utils/hash.h"
+#include <atomic>
 typedef struct key_t_s {
     unsigned char key[LGN];
 } key_tp;
@@ -96,12 +97,23 @@ public:
     CommandResponse CommandSetPara(const bess::pb::MVsketchArg &arg);
     CommandResponse CommandClear(const bess::pb::EmptyArg &) ;
     CommandResponse CommandGetVal(const bess::pb::MVsketchCommandGetValArg &arg);
+    MV_type *Active_Mv(){
+        return &mv_table[active_table];
+    } //using point function to point the data result
+    MV_type *Backup_Mv(){
+        return &mv_table[active_table];
+    }
+    void SwapMvTable(){
+        active_table = !active_table;
+    } //Swap table to change Mvsketch
     void Query(val_tp thresh, std::vector<std::pair<key_tp, val_tp> >&results);
     void Reset();
     static const Commands cmds;
 
 private:
-    MV_type mv_; //MVsketch datastructure
+    //struct MV_type mv_;
+    struct MV_type mv_table[2]; //MVsketch datastructure
+    std::atomic_bool active_table;
     val_tp Sum_total;  //store the sum of all the packet size
 };
 //

@@ -18,7 +18,7 @@ const Commands MVsketch::cmds = {
                                                                                     Command::THREAD_UNSAFE},
         {
                 "get_val", "MVsketchCommandGetValArg",
-                                         MODULE_CMD_FUNC(&MVsketch::CommandGetVal), Command::THREAD_UNSAFE}
+                                         MODULE_CMD_FUNC(&MVsketch::CommandGetVal), Command::THREAD_SAFE}
 };
 
 
@@ -66,23 +66,25 @@ CommandResponse MVsketch::Init(const bess::pb::MVsketchArg &arg){
         return CommandFailure(EINVAL,"row depth threshold must larger than 0");
     }
     Sum_total = 0;
-    mv_.depth = depth;
-    mv_.width = width;
-    mv_.lgn = 8*LGN;
-    mv_.sum = 0;
-    mv_.counts = new SBucket *[depth*width];
-    for (int i = 0; i < depth*width; i++) {
-        mv_.counts[i] = (SBucket*)calloc(1, sizeof(SBucket));
-        memset(mv_.counts[i], 0, sizeof(SBucket));
-        mv_.counts[i]->key[0] = '\0';
+    active_table = 0;
+    for(int i = 0;i < 2;i++) {
+        mv_table[i].depth = depth;
+        mv_table[i].width = width;
+        mv_table[i].lgn = 8 * LGN;
+        mv_table[i].sum = 0;
+        mv_table[i].counts = new SBucket *[depth * width];
+        for (int j = 0; j < depth * width; j++) {
+            mv_table[i].counts[j] = (SBucket *) calloc(1, sizeof(SBucket));
+            memset(mv_table[i].counts[j], 0, sizeof(SBucket));
+            mv_table[i].counts[j]->key[0] = '\0';
+        }
+        mv_table[i].hardner = new unsigned long[depth];
+        char name[] = "MVSketch";
+        unsigned long seed = AwareHash((unsigned char *) name, strlen(name), 13091204281, 228204732751, 6620830889);
+        for (int j = 0; j < depth; j++) {
+            mv_table[i].hardner[j] = GenHashSeed(seed++);
+        }
     }
-    mv_.hardner = new unsigned long[depth];
-    char name[] = "MVSketch";
-    unsigned long seed = AwareHash((unsigned char*)name, strlen(name), 13091204281, 228204732751, 6620830889);
-    for (int i = 0; i < depth; i++) {
-        mv_.hardner[i] = GenHashSeed(seed++);
-    }
-
     return CommandSuccess();
 };
 // CommandSetPara only use to read the Set Paras
@@ -97,6 +99,7 @@ CommandResponse MVsketch::CommandClear(const bess::pb::EmptyArg &) {
 CommandResponse MVsketch::CommandGetVal(const bess::pb::MVsketchCommandGetValArg &arg) {
     bess::pb::MVsketchCommandGetValResponse r;
     //flow_key test_key = MVvector_[1];
+    SwapMvTable();
     double threshold = arg.threshold();
     val_tp Threshold = threshold*Sum_total;
     std::cout<<"*****Debug for GetVal*****"<<threshold<<std::endl;
@@ -113,28 +116,31 @@ CommandResponse MVsketch::CommandGetVal(const bess::pb::MVsketchCommandGetValArg
     //need to add traffic_data as private data of class ... so that it can be read in this function
 }
 void MVsketch::Reset(){
-    for (int i = 0; i < mv_.depth*mv_.width; i++) {
-        mv_.counts[i]->count = 0;
-        mv_.counts[i]->sum = 0;
+    MV_type *mv_= Backup_Mv();
+    for (int i = 0; i < mv_->depth*mv_->width; i++) {
+        mv_->counts[i]->count = 0;
+        mv_->counts[i]->sum = 0;
+        mv_->counts[i]->key[0] = '\0';
     }
     Sum_total = 0;
 }
 void MVsketch::Update(unsigned char* key, val_tp val){
+    MV_type *mv_=Active_Mv();
     Sum_total += val;
-    mv_.sum += val;
+    mv_->sum += val;
     //mv_= {sum = 4544, counts = 0x730bb0, depth = 4, width = 1366,
     //       lgn = 64, hash = 0x766180, scale = 0x7661b0, hardner = 0x7661e0}
     //mv is the main mvsketch table
     //Debug_Module_packet(key,"*****update begin********");
     unsigned long bucket = 0;
-    int keylen = mv_.lgn/8;
-    for (int i = 0; i < mv_.depth; i++) {
-        bucket = MurmurHash64A(key, keylen, mv_.hardner[i]) % mv_.width;  // decide which col to store the candidate vote
+    int keylen = mv_->lgn/8;
+    for (int i = 0; i < mv_->depth; i++) {
+        bucket = MurmurHash64A(key, keylen, mv_->hardner[i]) % mv_->width;  // decide which col to store the candidate vote
         //key =(unsigned char *) 0x7fffffffe051 "\241E0ۡE-\005\326\065\237\003\006\334\005LM\001"
         //keylen = 8
         //key is the flow key, but bucket is the hash_result%width define which bucket to store the key
-        int index = i*mv_.width+bucket;  //real index, row i and the buckets col
-        SBucket *sbucket = mv_.counts[index];
+        int index = i*mv_->width+bucket;  //real index, row i and the buckets col
+        SBucket *sbucket = mv_->counts[index];
         sbucket->sum += val;
         if (sbucket->key[0] == '\0') {
             memcpy(sbucket->key, key, keylen);  //set a new candidate key
@@ -179,11 +185,12 @@ void MVsketch::ProcessBatch(Context *ctx, bess::PacketBatch *batch) {
 }
 
 void MVsketch::Query(val_tp thresh, std::vector<std::pair<key_tp, val_tp> >&results) {
+    MV_type *mv_=Backup_Mv();
     myset res;
-    for (int i = 0; i < mv_.width*mv_.depth; i++) {
-        if (mv_.counts[i]->sum > thresh) {
+    for (int i = 0; i < mv_->width*mv_->depth; i++) {
+        if (mv_->counts[i]->sum > thresh) {
             key_tp reskey;
-            memcpy(reskey.key, mv_.counts[i]->key, mv_.lgn/8);
+            memcpy(reskey.key, mv_->counts[i]->key, mv_->lgn/8);
             res.insert(reskey);
         }
     }
@@ -196,21 +203,21 @@ void MVsketch::Query(val_tp thresh, std::vector<std::pair<key_tp, val_tp> >&resu
     */
     for (auto it = res.begin(); it != res.end(); it++) {
         val_tp resval = 0;
-        for (int j = 0; j < mv_.depth; j++) {
-            unsigned long bucket = MurmurHash64A((*it).key, mv_.lgn/8, mv_.hardner[j]) % mv_.width;
-            unsigned long index = j*mv_.width+bucket;
+        for (int j = 0; j < mv_->depth; j++) {
+            unsigned long bucket = MurmurHash64A((*it).key, mv_->lgn/8, mv_->hardner[j]) % mv_->width;
+            unsigned long index = j*mv_->width+bucket;
             val_tp tempval = 0;
-            if (memcmp(mv_.counts[index]->key, (*it).key, mv_.lgn/8) == 0) {
-                tempval = (mv_.counts[index]->sum - mv_.counts[index]->count)/2 + mv_.counts[index]->count;
+            if (memcmp(mv_->counts[index]->key, (*it).key, mv_->lgn/8) == 0) {
+                tempval = (mv_->counts[index]->sum - mv_->counts[index]->count)/2 + mv_->counts[index]->count;
             } else {
-                tempval = (mv_.counts[index]->sum - mv_.counts[index]->count)/2;
+                tempval = (mv_->counts[index]->sum - mv_->counts[index]->count)/2;
             }
             if (j == 0) resval = tempval;
             else resval = std::min(tempval, resval);
         }
         if (resval > thresh ) {
             key_tp key;
-            memcpy(key.key, (*it).key, mv_.lgn/8);
+            memcpy(key.key, (*it).key, mv_->lgn/8);
             std::pair<key_tp, val_tp> node;
             node.first = key;
             node.second = resval;
@@ -218,6 +225,7 @@ void MVsketch::Query(val_tp thresh, std::vector<std::pair<key_tp, val_tp> >&resu
         }
     }
 }
+
 
 
 ADD_MODULE(MVsketch,"MVsketch","MVsketch module from antonywei")
