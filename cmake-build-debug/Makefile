@@ -1689,6 +1689,33 @@ core/modules/noop.cc.s:
 	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/modules/noop.cc.s
 .PHONY : core/modules/noop.cc.s
 
+core/modules/portMatch.o: core/modules/portMatch.cc.o
+
+.PHONY : core/modules/portMatch.o
+
+# target to build an object file
+core/modules/portMatch.cc.o:
+	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/modules/portMatch.cc.o
+.PHONY : core/modules/portMatch.cc.o
+
+core/modules/portMatch.i: core/modules/portMatch.cc.i
+
+.PHONY : core/modules/portMatch.i
+
+# target to preprocess a source file
+core/modules/portMatch.cc.i:
+	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/modules/portMatch.cc.i
+.PHONY : core/modules/portMatch.cc.i
+
+core/modules/portMatch.s: core/modules/portMatch.cc.s
+
+.PHONY : core/modules/portMatch.s
+
+# target to generate assembly for a file
+core/modules/portMatch.cc.s:
+	$(MAKE) -f CMakeFiles/bess.dir/build.make CMakeFiles/bess.dir/core/modules/portMatch.cc.s
+.PHONY : core/modules/portMatch.cc.s
+
 core/modules/port_inc.o: core/modules/port_inc.cc.o
 
 .PHONY : core/modules/port_inc.o
@@ -27954,6 +27981,9 @@ help:
 	@echo "... core/modules/noop.o"
 	@echo "... core/modules/noop.i"
 	@echo "... core/modules/noop.s"
+	@echo "... core/modules/portMatch.o"
+	@echo "... core/modules/portMatch.i"
+	@echo "... core/modules/portMatch.s"
 	@echo "... core/modules/port_inc.o"
 	@echo "... core/modules/port_inc.i"
 	@echo "... core/modules/port_inc.s"

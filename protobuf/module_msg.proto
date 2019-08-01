@@ -282,6 +282,7 @@ message MVsketchCommandGetValResponse {
         uint64 count = 6;
     }
     repeated TrafficInfo flow_list = 1;
+    uint64 pkt_thresh = 2;
 }
 
 /**
@@ -1223,4 +1224,32 @@ message MplsPopArg {
  */
 message WorkerSplitArg {
   map<uint32, uint32> worker_gates = 1; // ogate -> worker mask
+}
+
+message portMatchArg{
+   message portRule{
+     uint32 src_port = 1;    /// port block in CIDR.".
+     uint32 dst_port = 2;
+     uint32 gate = 3;
+   }
+   repeated portRule port_list = 1;
+}
+
+message portMatchCommandAddArg{
+  message portRule{
+    uint32 src_port = 1;    /// port block in CIDR.".
+    uint32 dst_port = 2;
+    uint32 gate = 3;
+  }
+  repeated portRule port_list = 1;
+  uint64 Threshold = 2;
+}
+
+message portMatchResponseArg{
+  message portRule{
+    uint32 src_port = 1;    /// port block in CIDR.".
+    uint32 dst_port = 2;
+    uint64 count = 3;
+  }
+  repeated portRule port_list = 1;
 }

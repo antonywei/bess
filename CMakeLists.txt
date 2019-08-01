@@ -2411,4 +2411,4 @@ add_executable(bess
         deps/dpdk-17.11/test/test-pipeline/pipeline_stub.c
         deps/dpdk-17.11/test/test-pipeline/runtime.c
         sample_plugin/modules/sequential_update.cc
-        sample_plugin/modules/sequential_update.h core/modules/myacl.cc core/modules/myacl.h core/modules/MVsketch.cc core/modules/MVsketch.h core/utils/hash.h core/utils/hash.cc)
+        sample_plugin/modules/sequential_update.h core/modules/myacl.cc core/modules/myacl.h core/modules/MVsketch.cc core/modules/MVsketch.h core/utils/hash.h core/utils/hash.cc core/modules/portMatch.cc core/modules/portMatch.h)

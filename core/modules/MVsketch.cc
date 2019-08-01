@@ -111,6 +111,7 @@ CommandResponse MVsketch::CommandGetVal(const bess::pb::MVsketchCommandGetValArg
     for(auto res = results.begin();res != results.end();res++ ){
         SetTrafficInfo(res->first,res->second,&r);
     }
+    r.set_pkt_thresh(Threshold);
     Reset();
     return CommandSuccess(r);
     //need to add traffic_data as private data of class ... so that it can be read in this function

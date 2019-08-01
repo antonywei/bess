@@ -790,6 +790,12 @@
 		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/modules/noop.h">
 			<Option target="bess"/>
 		</Unit>
+		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/modules/portMatch.cc">
+			<Option target="bess"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/modules/portMatch.h">
+			<Option target="bess"/>
+		</Unit>
 		<Unit filename="/tmp/tmp.xcbvpeBMlO/core/modules/port_inc.cc">
 			<Option target="bess"/>
 		</Unit>

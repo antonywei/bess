@@ -101,7 +101,7 @@ public:
         return &mv_table[active_table];
     } //using point function to point the data result
     MV_type *Backup_Mv(){
-        return &mv_table[active_table];
+        return &mv_table[!active_table];
     }
     void SwapMvTable(){
         active_table = !active_table;

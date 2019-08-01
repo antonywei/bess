@@ -1023,6 +1023,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/bess.dir/core/modules/myacl.cc.o"
   "CMakeFiles/bess.dir/core/modules/MVsketch.cc.o"
   "CMakeFiles/bess.dir/core/utils/hash.cc.o"
+  "CMakeFiles/bess.dir/core/modules/portMatch.cc.o"
   "bess.pdb"
   "bess"
 )
