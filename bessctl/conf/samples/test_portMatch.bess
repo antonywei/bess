@@ -60,25 +60,36 @@ packets = [gen_packet(scapy.TCP, '172.16.100.1', '10.0.0.1',src_port=10001,dst_p
            gen_packet(scapy.TCP, '172.12.55.99', '12.34.56.78',10003,10004)
           ]
 
-portList = [{"src_port":10001,"dst_port":10002,"gate":1},
-              {"src_port":10003,"dst_port":10004,"gate":2}]
-portList2 = [{"src_port":10001,"dst_port":10002,"gate":3},
-              {"src_port":10003,"dst_port":10004,"gate":4}]
+portList = [{"src_port":10001,"dst_port":10002,"gate":0},
+              {"src_port":10003,"dst_port":10004,"gate":1}]
+portList2 = [{"src_port":10001,"dst_port":10002,"gate":2},
+              {"src_port":10003,"dst_port":10004,"gate":3}]
+portList3 = [{"src_port":10001,"dst_port":10002,"gate":4},
+              {"src_port":10003,"dst_port":10004,"gate":5}]
+portList4 = [{"src_port":10001,"dst_port":10002,"gate":6},
+              {"src_port":10003,"dst_port":10004,"gate":7}]
 pm = portMatch(port_list=portList)
 
-FlowGen(template=pkt_data,pps=1e1)->Rewrite(templates=packets) ->pm-> Sink()
+FlowGen(template=pkt_data,pps=1e4)->Rewrite(templates=packets) -> pm
+
+pm:0 -> Sink()
+pm:1 -> Sink()
+pm:2 -> Sink()
+pm:3 -> Sink()
+pm:4 -> Sink()
+pm:5 -> Sink()
+pm:6 -> Sink()
+pm:7 -> Sink()
+pm:8 -> Sink()
+pm:9 -> Sink()
+pm:10 -> Sink()
+pm:11 -> Sink()
+
 bess.resume_all()
-time.sleep(0.1)
-stats = pm.add(port_list=portList2,Threshold=10)
-bess.pause_all()
-print(stats)
-'''
-for i in range(len(stats.flow_list)):
-    print("src ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[i].src_ip)))
-    print("dst ip",socket.inet_ntoa(struct.pack('<L', stats.flow_list[i].dst_ip)))
-    print(hex(stats.flow_list[i].src_port))
-    print(hex(stats.flow_list[i].dst_port))
-    print("resval",stats.flow_list[i].count)
-#print("src port ",struct.pack('<L', hex(stats.flow_list[0].src_port)))
-#print("dst port ",struct.pack('<L', hex(stats.flow_list[0].dst_port)))
-'''
+time.sleep(5)
+stats = pm.add(port_list=portList2,Threshold=1000)
+time.sleep(5)
+stats = pm.add(port_list=portList3,Threshold=1000)
+time.sleep(5)
+stats = pm.add(port_list=portList4,Threshold=1000)
+
