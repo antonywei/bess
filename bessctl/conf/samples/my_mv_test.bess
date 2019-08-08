@@ -65,7 +65,7 @@ packets = [gen_packet(scapy.TCP, '172.16.100.1', '10.0.0.1'),
 
 mv = MVsketch(width=3,depth=4)
 
-FlowGen(template=pkt_data,pps=1e1)->Rewrite(templates=packets) ->mv-> Sink()
+FlowGen(template=pkt_data,pps=1e1)->Rewrite(templates=packets) -> mv-> Sink()
 
 bess.resume_all()
 time.sleep(0.1)
